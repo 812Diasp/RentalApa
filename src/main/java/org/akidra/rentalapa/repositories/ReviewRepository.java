@@ -1,4 +1,8 @@
 package org.akidra.rentalapa.repositories;
 
-public class ReviewRepository {
+import org.akidra.rentalapa.entities.Review;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.UUID;
+
+public interface ReviewRepository extends JpaRepository<Review, UUID> {
 }

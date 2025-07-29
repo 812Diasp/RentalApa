@@ -1,4 +1,8 @@
 package org.akidra.rentalapa.entities;
 
-public class RentObjectType {
+public enum RentObjectType {
+    ROOM,
+    APARTMENTS,
+    HOUSE,
+    COMMERCIAL
 }
