@@ -20,7 +20,7 @@ public class User {
 
     @Embedded
     private Adress userAddress;
-
+    private boolean blocked;
     private String password;
     private String username;
     private String email;

@@ -22,6 +22,7 @@ public class UserController {
     public User getUserById(@PathVariable UUID id){
         return userService.getUserById(id);
     }
+
     @PostMapping
     public User createUser(@RequestBody User user){
         return userService.saveUser(user);

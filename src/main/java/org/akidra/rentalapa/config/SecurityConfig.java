@@ -18,11 +18,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS с настройками
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                // Swagger UI
+                                "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/swagger-resources",
+                                "/webjars/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+
+                                // API endpoints
                                 "/api/users/**"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -35,13 +44,16 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Разрешаем только фронтенд
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",  // Ваш фронтенд
+                "http://localhost:8080"  // Для доступа к Swagger UI
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true); // Если нужны куки/авторизация
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Применяем ко всем путям
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

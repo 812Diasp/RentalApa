@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Getter @Setter
+@Table(name = "rent_objects")
 public class RentObject {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,13 +27,29 @@ public class RentObject {
     private Double commission;
     private String description;
 
-    @ElementCollection
-    private List<LocalDate> reserved;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "rent_object_images", joinColumns = @JoinColumn(name = "rent_object_id"))
+    @Column(name = "image_url", length = 2048)
+    private List<String> imageUrls;
 
     @ElementCollection
-    private List<LocalDate> availableRentSpan;
+    @CollectionTable(name = "reserved_periods", joinColumns = @JoinColumn(name = "rent_object_id"))
+    private List<DatePeriod> reservedPeriods;
+
+    @ElementCollection
+    @CollectionTable(name = "available_periods", joinColumns = @JoinColumn(name = "rent_object_id"))
+    private List<DatePeriod> availablePeriods;
 
     @ManyToOne
     @JoinColumn(name = "rentman_id")
     private RentMan rentMan;
+
+    // Методы для работы с периодами
+    public List<DatePeriod> getReservedPeriods() {
+        return reservedPeriods;
+    }
+
+    public List<DatePeriod> getAvailablePeriods() {
+        return availablePeriods;
+    }
 }
